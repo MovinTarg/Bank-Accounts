@@ -1,0 +1,46 @@
+@{
+    ViewData["Title"] = "Account Dashboard";
+}
+<h1>Welcome, @ViewBag.ActiveUser.FirstName</h1>
+<h4>Current Balance: @ViewBag.ActiveUser.AccountBalance</h4>
+@model Bank_Accounts.Models.Transaction
+<form asp-controller="Account" asp-action="transaction" method="POST">
+  <div class="form-group">
+    <span asp-validation-for="Amount"></span>
+    <label asp-for="Amount">Deposit / Withdraw:</label>
+    <input class="form-control" asp-for="Amount">
+  </div>
+  @if (ViewBag.Messages != null)
+    {
+        <p>@ViewBag.Messages</p>
+    }
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+<div class="ledger">
+    @{
+        if(ViewBag.ActiveUser.Transactions.Count > 0)
+        {
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Amount</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var transaction in ViewBag.ActiveUser.Transactions)
+                {
+                    <tr>
+                        <td>@transaction.Amount</td>
+                        <td>@transaction.CreatedAt</td>
+                    </tr>
+                }
+                </tbody>
+            </table>  
+        }
+        else
+        {
+            <h4>Use your bank account!</h4>
+        }
+    }
+</div>
